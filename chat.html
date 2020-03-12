@@ -1,0 +1,38 @@
+<!-- index.html -->
+<html>
+
+<head>
+    <script type="text/javascript" src="http://code.jquery.com/jquery-1.4.2.min.js"></script>
+    <script type="text/javascript" charset="utf-8">
+        $(document).ready(function () {
+            $('form').submit(function (event) {
+                ws.send($('#data').val());
+                return false;
+            });
+            if ("WebSocket" in window) {
+
+                ws = new WebSocket("ws://" + "192.168.0.5" + ":8080/pipe");
+                ws.onmessage = function (msg) {
+                    $("#log").append("<p>" + msg.data + "</p>")
+                };
+            } else {
+                alert("WebSocket not supported");
+            }
+        });
+    </script>
+
+</head>
+
+<body>
+    <h1>WebSocket Example</h1>
+    <p id="text-field"></p>
+    <form method='POST' action='#'>
+        <textarea name='data' id="data"></textarea>
+        <div><input type='submit'></div>
+    </form>
+    <div>
+        <h1>Receive:</h1>
+        <div id="log"></div>
+</body>
+
+</html>
