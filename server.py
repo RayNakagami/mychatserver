@@ -30,8 +30,7 @@ def pipe():
             del clients[key]
             print(key,"del")
     else:
-        print("a")
-        return("abc")
+        return
 
 def main():
     app.debug = True
