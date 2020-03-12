@@ -35,7 +35,7 @@ def pipe():
 
 def main():
     app.debug = True
-    server = pywsgi.WSGIServer(("192.168.0.5", 8080), app, handler_class=WebSocketHandler)
+    server = pywsgi.WSGIServer(("", 8080), app, handler_class=WebSocketHandler)
     server.serve_forever()
 
 
