@@ -2,11 +2,13 @@
 from flask import Flask, request, render_template
 from gevent import pywsgi
 from geventwebsocket.handler import WebSocketHandler
+import json
+import socket
+import sqlite3
 
 app = Flask(__name__)
 app.config.from_object(__name__)
 clients = {}
-
 
 @app.route("/")
 def index():
@@ -23,8 +25,11 @@ def pipe():
         try:
             while True:
                 msg = ws.receive()
+                d=json.loads(msg)
+
+              
                 for client in clients.values():
-                    client.send(msg)
+                    client.send(d['text'])
         except:
             ws.close()
             del clients[key]
@@ -34,9 +39,15 @@ def pipe():
 
 def main():
     app.debug = True
-    server = pywsgi.WSGIServer(("", 8080), app, handler_class=WebSocketHandler)
+    host=socket.gethostname()
+    ip = socket.gethostbyname(host)
+
+
+    server = pywsgi.WSGIServer((ip, 8080), app, handler_class=WebSocketHandler)
+
     server.serve_forever()
 
 
 if __name__ == "__main__":
     main()
+   

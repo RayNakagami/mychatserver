@@ -6,12 +6,20 @@
     <script type="text/javascript" charset="utf-8">
         $(document).ready(function () {
             $('form').submit(function (event) {
-                ws.send($('#data').val());
+
+                msg = {
+                    type: "message",
+                    text: $('#data').val(),
+
+                    date: Date.now()
+                };
+
+                ws.send(JSON.stringify(msg));
                 return false;
             });
             if ("WebSocket" in window) {
                 //必要に応じて真ん中にアドレスを入れる
-                ws = new WebSocket("ws://" + "" + ":8080/pipe");
+                ws = new WebSocket("ws://" + "192.168.0.3" + ":8080/pipe");
 
                 ws.onmessage = function (msg) {
                     $("#log").append("<p>" + msg.data + "</p>")
